@@ -1,20 +1,23 @@
-import React from 'react';
-import { useLoaderData, useParams } from 'react-router';
-import { CiStar } from 'react-icons/ci';
+import { useLoaderData, useParams } from "react-router";
 
 const BookDetails = () => {
-  const books = useLoaderData();
   const { bookId: bookParamsId } = useParams();
+  const books = useLoaderData();
 
   const expectedBook = books.find(
-    book => book.bookId === Number(bookParamsId)
+    (book) => book.bookId === Number(bookParamsId)
   );
 
   if (!expectedBook) {
-    return <div className="text-center mt-10 text-lg md:text-xl">Book not found...</div>;
+    return (
+      <div className="text-center mt-10 text-lg md:text-xl">
+        Book not found...
+      </div>
+    );
   }
 
   const {
+    bookId,
     bookName,
     author,
     image,
@@ -24,87 +27,64 @@ const BookDetails = () => {
     category,
     tags,
     publisher,
-    yearOfPublishing
+    yearOfPublishing,
   } = expectedBook;
 
   return (
     <div className="container mx-auto my-8 px-4">
-      <div className="bg-base-100 shadow-xl rounded-3xl p-5 md:p-8 lg:p-10 flex flex-col lg:flex-row gap-6 lg:gap-10">
-        
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-base-100 shadow-sm rounded-xl overflow-hidden">
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center items-start">
+        <figure className="w-full flex items-center justify-center bg-gray-100">
           <img
-            className="rounded-2xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg object-cover shadow-lg hover:scale-105 transition duration-300"
             src={image}
             alt={bookName}
+            className="w-full h-auto max-h-[400px] object-cover rounded-xl"
           />
-        </div>
+        </figure>
 
         {/* Content */}
-        <div className="lg:w-1/2 flex flex-col">
-          
-          {/* Title */}
-          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-snug">
-            {bookName}
-          </h1>
-
-          {/* Author */}
-          <p className="text-gray-500 mt-1 text-sm sm:text-base md:text-base lg:text-lg">
-            By {author}
-          </p>
-
-          {/* Category */}
-          <p className="mt-2 text-green-600 font-semibold text-sm sm:text-base">
-            {category}
-          </p>
+        <div className="card-body space-y-3 p-4 md:p-6">
+          <h2 className="card-title text-xl sm:text-2xl md:text-3xl">{bookName}</h2>
+          <h3 className="text-gray-600 text-sm sm:text-base">By: {author}</h3>
+          <p className="py-2 border-y text-sm sm:text-base font-medium">{category}</p>
+          <p className="text-sm sm:text-base leading-relaxed">Review: {review}</p>
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mt-2">
-            {tags.map((tag, index) => (
+            {tags.map((tag, ind) => (
               <span
-                key={index}
-                className="badge bg-green-100 text-green-600 px-2 py-1 text-xs sm:text-sm"
+                key={ind}
+                className="badge text-green-500 bg-green-100 font-bold text-xs sm:text-sm"
               >
-                #{tag}
+                {tag}
               </span>
             ))}
           </div>
 
-          {/* Review */}
-          <p className="mt-4 text-gray-600 text-sm sm:text-base md:text-base leading-relaxed">
-            {review}
-          </p>
-
           {/* Info */}
-          <div className="mt-4 space-y-1 text-sm sm:text-base">
-            <p><span className="font-semibold">Publisher:</span> {publisher}</p>
-            <p><span className="font-semibold">Year:</span> {yearOfPublishing}</p>
-            <p><span className="font-semibold">Pages:</span> {totalPages}</p>
-          </div>
-
-          {/* Bottom */}
-          <div className="flex flex-wrap justify-between items-center mt-4 gap-3">
-            
-            {/* Rating */}
-            <div className="flex items-center gap-1 sm:gap-2 text-base sm:text-lg font-semibold">
-              <CiStar className="text-lg sm:text-xl" />
-              {rating}
+          <div className="border-t pt-3 space-y-2 text-sm sm:text-base">
+            <div className="flex justify-between items-center">
+              <span>Number of pages:</span>
+              <span>{totalPages}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span>Publisher:</span>
+              <span>{publisher}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span>Publish time:</span>
+              <span>{yearOfPublishing}</span>
             </div>
 
             {/* Buttons */}
-            <div className="flex gap-2 sm:gap-3 flex-wrap">
-              <button className="btn btn-outline btn-success text-sm sm:text-base">
-                Wishlist
-              </button>
-              <button className="btn btn-success hover:scale-105 transition text-sm sm:text-base">
-                Read Book
+            <div className="flex flex-wrap gap-2 mt-2">
+              <button className="btn btn-sm sm:btn-md w-full sm:w-auto">Mark as Read</button>
+              <button className="btn btn-primary btn-sm sm:btn-md w-full sm:w-auto">
+                Add to Wishlist
               </button>
             </div>
-
           </div>
-
         </div>
-
       </div>
     </div>
   );
